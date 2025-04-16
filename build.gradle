@@ -1,0 +1,59 @@
+plugins {
+    id "io.micronaut.application" version "${micronautCatalogPluginVersion}"
+}
+
+version = "0.1"
+group = "com.example"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor mn.micronaut.inject.java
+    annotationProcessor mn.micronaut.serde.processor
+
+    implementation mn.javax.annotation.api
+    implementation mn.jsr305
+
+    implementation mn.micronaut.http
+    implementation mn.micronaut.json.core
+    implementation mn.micronaut.serde.jackson
+    implementation mn.micronaut.validation
+    implementation mn.slf4j.api
+
+    implementation mn.logback.classic
+
+
+    testImplementation mn.micronaut.test.junit5
+    testImplementation mn.micronaut.test.rest.assured
+}
+
+
+application {
+    mainClass = "com.example.Application"
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
+}
+
+
+graalvmNative.toolchainDetection = false
+
+micronaut {
+    version "4.7.6"
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.example.*")
+    }
+}
+
+
+tasks.named("dockerfileNative") {
+    jdkVersion = "21"
+}
+
+
